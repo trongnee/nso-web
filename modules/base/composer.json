@@ -1,0 +1,16 @@
+{
+    "name": "nso/base",
+    "type": "library",
+    "description": "NSO package",
+    "autoload": {
+        "files": [
+            "helpers/function.php"
+        ],
+        "psr-4": {
+            "NSO\\": "src/"
+        }
+    },
+    "require": {
+        "nso/backend": "*"
+    }
+}

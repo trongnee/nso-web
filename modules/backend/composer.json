@@ -1,0 +1,45 @@
+{
+  "name": "nso/backend",
+  "description": "NSO base package",
+  "keywords": [],
+  "authors": [
+    {
+      "name": "Pham Van Trong",
+      "email": "trongpv.dev@gmail.com",
+      "role": "dev",
+      "homepage": "https://github.com/trongnee"
+    }
+  ],
+  "require": {},
+  "require-dev": {},
+  "autoload": {
+    "files": [],
+    "psr-4": {
+      "NSO\\Backend\\": "src/"
+    }
+  },
+  "extra": {
+    "laravel": {
+      "providers": [
+        "NSO\\Backend\\Providers\\BackendServiceProvider",
+        "NSO\\Backend\\Providers\\ThemeServiceProvider"
+      ],
+      "aliases": {
+        "Theme": "NSO\\Backend\\Facades\\Theme"
+      }
+    }
+  },
+  "scripts": {
+    "analyze": "vendor/bin/phpstan analyse",
+    "lint": "vendor/bin/pint",
+    "format": "vendor/bin/rector process",
+    "post-autoload-dump": "@php ./vendor/bin/testbench package:discover --ansi",
+    "test": "vendor/bin/phpunit",
+    "pest": "vendor/bin/pest"
+  },
+  "config": {
+    "sort-packages": true
+  },
+  "minimum-stability": "dev",
+  "prefer-stable": false
+}
