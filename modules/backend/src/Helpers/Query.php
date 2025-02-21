@@ -23,20 +23,24 @@ class Query
      */
     public function when(
         string $key,
-        string $column,
+        string | callable $column,
         Operator $operator = Operator::EQUAL,
         callable $replace = null
     ) {
-        $query_mothod = $this->getQueryMethod($operator);
 
         $value = data_get($this->inputs, $key);
 
         if (filled($value)) {
-            $this->query->{$query_mothod}(
-                $column,
-                $operator->value,
-                $this->processValue($value, $operator, $replace)
-            );
+            if (is_callable($column)) {
+                $column($this->query, $value);
+            } else {
+                $query_mothod = $this->getQueryMethod($operator);
+                $this->query->{$query_mothod}(
+                    $column,
+                    $operator->value,
+                    $this->processValue($value, $operator, $replace)
+                );
+            }
         }
 
         return $this;

@@ -2,7 +2,9 @@
 
 namespace NSO\Backend\Controllers;
 
+use Illuminate\Support\Facades\Cache;
 use NSO\Backend\Theme\Menu;
+use NSO\Models\Item;
 
 class BackendController
 {
@@ -18,5 +20,13 @@ class BackendController
         return apiJson([
             'menu' => $menu,
         ]);
+    }
+
+    public function items()
+    {
+        $items = Cache::rememberForever('nso.items', function () {
+            return Item::all()->keyBy('id');
+        });
+        return apiJson($items);
     }
 }

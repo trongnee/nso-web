@@ -67,6 +67,19 @@
     <script src="{{ asset('assets/js/main.js') }}"></script>
     <!-- Page JS -->
     @yield('page-js')
+
+    @if ($errors->any())
+        @foreach ($errors->all() as $error)
+            <script type="text/javascript">
+                toastr.error("{{ $error }}");
+            </script>
+        @endforeach
+    @endif
+    @if (session('message'))
+        <script type="text/javascript">
+            toastr.info("{{ session('message') }}");
+        </script>
+    @endif
 </body>
 
 </html>

@@ -40,7 +40,7 @@ return [
             [
                 'label' => 'Nhân Vật Trong Game',
                 'icon' => 'ti-users',
-                'route' => 'login',
+                'route' => 'players',
             ],
         ]
     ],

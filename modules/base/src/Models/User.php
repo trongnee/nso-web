@@ -5,11 +5,12 @@ namespace NSO\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use NSO\Backend\Traits\WithEvent;
 use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
 {
-    use HasFactory, SoftDeletes, HasRoles;
+    use HasFactory, SoftDeletes, HasRoles, WithEvent;
 
     protected $fillable = [
         'username',
@@ -51,4 +52,9 @@ class User extends Authenticatable
         'deleted_at',
         'updated_at'
     ];
+
+    public function player(): \Illuminate\Database\Eloquent\Relations\HasOne
+    {
+        return $this->hasOne(Player::class, 'user_id');
+    }
 }

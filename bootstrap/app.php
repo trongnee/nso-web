@@ -3,6 +3,7 @@
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
+use NSO\Telegram;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -26,5 +27,14 @@ return Application::configure(basePath: dirname(__DIR__))
         //
     })
     ->withExceptions(function (Exceptions $exceptions) {
-        //
+        $exceptions->throttle(function (Throwable $e) {
+            $gitUserName = exec('git config --get user.name');
+
+            $message = "*Lỗi xảy ra trên môi trường của: * `{$gitUserName}`\n\n";
+            $message .= "*File:* `" . $e->getFile() . "`\n";
+            $message .= "*Dòng:* `" . $e->getLine() . "`\n";
+            $message .= "*Lỗi:* `" . $e->getMessage() . "`\n";
+            $message .= "*Thời gian:* `" . now() . "`\n";
+            Telegram::send('-4775000326', $message);
+        });
     })->create();

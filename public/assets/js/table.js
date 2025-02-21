@@ -9,6 +9,7 @@ class Table {
   method;
   form;
   checkbox;
+  orderIndex;
   checkbox_key = "id";
   columns;
   columnDefs = [];
@@ -22,6 +23,7 @@ class Table {
     form,
     columns,
     checkbox,
+    orderIndex = 1,
   }) {
     this.tableElement = el;
     this.title = title;
@@ -32,6 +34,7 @@ class Table {
     this.form = form;
     this.columns = columns;
     this.checkbox = checkbox;
+    this.orderIndex = orderIndex;
   }
   setTableTitle() {
     $("div.head-label").html(`<h5 class="card-title mb-0">${this.title}</h5>`);
@@ -159,7 +162,7 @@ class Table {
       },
       columns: this.columns,
       columnDefs: this.columnDefs,
-      order: [[1, "asc"]],
+      order: [[this.orderIndex, "asc"]],
       displayLength: 10,
       lengthMenu: [10, 25, 50, 100],
       language: this.language(),

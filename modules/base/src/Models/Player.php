@@ -64,8 +64,29 @@ class Player extends Model
         "deleted_at"
     ];
 
+    protected function casts(): array
+    {
+        return [
+            'data' => 'array',
+            'bag' => 'array',
+            'box' => 'array',
+            'equiped' => 'array',
+            'skill' => 'array',
+            'task' => 'array',
+        ];
+    }
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id');
+    }
+
+    public function clazz(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    {
+        return $this->belongsTo(Clazz::class, 'class');
+    }
+
+    public function headPart()
+    {
+        return $this->belongsTo(NinjaPart::class, 'head');
     }
 }

@@ -4,6 +4,9 @@ namespace NSO\Backend\Services;
 
 use NSO\Models\User;
 use \Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
+use NSO\Backend\Events\Transaction;
 use NSO\Backend\Helpers\Query;
 
 class UserService
@@ -52,6 +55,58 @@ class UserService
 
     public function show($id)
     {
-        return $this->model::find($id);
+        $user = $this->model::with([
+            'player:id,user_id,data,name,class,xu,yen,gender',
+            'player.clazz',
+        ])->find($id);
+
+        return $user;
+    }
+
+    public function updateBalance($inputs)
+    {
+        $user = $this->model->find($inputs['user_id']);
+        $operator = $inputs['type'] === 'credit' ? 1 : -1;
+
+        $pre_balance = $user->balance;
+        $new_balance = $user->balance + $inputs['amount'] * $operator;
+
+        $data_update = [
+            'balance' => $new_balance,
+        ];
+        if ($operator === 1) {
+            $data_update['tongnap'] = $user->tongnap + $inputs['amount'];
+        }
+        DB::beginTransaction();
+        try {
+            $user->update($data_update);
+            Transaction::dispatch(
+                $user,
+                [
+                    ...$inputs,
+                    'pre_balance' => $pre_balance
+                ]
+            );
+
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollback();
+        }
+    }
+
+    public function updateUser($inputs)
+    {
+        $user = $this->model->find($inputs['user_id']);
+
+        $data = [
+            'username' => $inputs['username'],
+            'phone' => $inputs['phone'],
+            'status' => $inputs['status'],
+            'activated' => $inputs['activated'],
+        ];
+        if (filled($inputs['password'])) {
+            $data['password'] = Hash::make($inputs['password']);
+        }
+        $user->update($data);
     }
 }

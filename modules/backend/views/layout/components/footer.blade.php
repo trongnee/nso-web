@@ -6,7 +6,7 @@
                 ©
                 <script>
                     document.write(new Date().getFullYear())
-                </script>, made with ❤️ by <a
+                </script>, thiết kế bằng ❤️ của <a
                     href="https://www.facebook.com/pham.v.trong.334" target="_blank"
                     class="footer-link">Văn Trọng</a>
             </div>
